@@ -1,10 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Fast SSH relay</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.3/css/bootstrap.min.css"
+          integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css"
+          integrity="sha512-iLYuqv+v/P4u9erpk+KM83Ioe/l7SEmr7wB6g+Kg1qmEit8EShDKnKtLHlv2QXUp7GGJhmqDI+1PhJYLTsfb8w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <style>
+        .xterm.fullscreen {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: auto;
+            height: auto;
+            z-index: 255
+        }
+
+        .row {
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .btn {
+            margin-top: 15px;
+        }
+
+        .btn-danger {
+            margin-left: 5px;
+        }
+    </style>
 </head>
 <body>
-$END$
+<div id="waiter" style="display: none"> Connecting ...</div>
+
+<div class="container form-container" style="display: none">
+    <form id="connect" action="" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col">
+                <label for="Hostname">Hostname</label>
+                <input class="form-control" type="text" id="hostname" name="hostname" value="" required>
+            </div>
+            <div class="col">
+                <label for="Port">Port</label>
+                <input class="form-control" type="number" id="port" name="port" placeholder="22" value="" min=1
+                       max=65535>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="Username">Username</label>
+                <input class="form-control" type="text" id="username" name="username" value="" required>
+            </div>
+            <div class="col">
+                <label for="Password">Password</label>
+                <input class="form-control" type="password" id="password" name="password" value="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="Username">Private Key</label>
+                <input class="form-control" type="file" id="privatekey" name="privatekey" value="">
+            </div>
+            <div class="col">
+                <label for="Passphrase">Passphrase</label>
+                <input class="form-control" type="password" id="passphrase" name="passphrase" value="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="totp">Totp (time-based one-time password)</label>
+                <input class="form-control" type="password" id="totp" name="totp" value="">
+            </div>
+            <div class="col">
+            </div>
+        </div>
+        <input type="hidden" id="term" name="term" value="xterm-256color">
+        {% module xsrf_form_html() %}
+        <button type="submit" class="btn btn-primary">Connect</button>
+        <button type="reset" class="btn btn-danger">Reset</button>
+    </form>
+</div>
+
+<div class="container">
+    <div id="status" style="color: red;"></div>
+    <div id="terminal"></div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.3/js/bootstrap.min.js"
+        integrity="sha512-8qmis31OQi6hIRgvkht0s6mCOittjMa9GMqtK9hes5iEQBQE/Ca6yGE5FsW36vyipGoWQswBj/QBm2JR086Rkw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"
+        integrity="sha512-2PRgAav8Os8vLcOAh1gSaDoNLe1fAyq8/G3QSdyjFFD+OqNjLeHE/8q4+S4MEZgPsuo+itHopj+hJvqS8XUQ8A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.4/umd/popper.min.js"
+        integrity="sha512-+Tn2V/oN9O/kiaJg/1o5bETqyS35pMDJzkhkf8uvCzxmRox69AsWkSpBSMEGEe4EZp07Nunw712J3Xvh5Tti0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="static/js/main.js"></script>
+
+
 </body>
 </html>
+
