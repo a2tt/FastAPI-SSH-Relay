@@ -11,17 +11,6 @@
           integrity="sha512-iLYuqv+v/P4u9erpk+KM83Ioe/l7SEmr7wB6g+Kg1qmEit8EShDKnKtLHlv2QXUp7GGJhmqDI+1PhJYLTsfb8w=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <style>
-        .xterm.fullscreen {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: auto;
-            height: auto;
-            z-index: 255
-        }
-
         .row {
             margin-top: 15px;
             margin-bottom: 10px;
@@ -41,10 +30,8 @@
     </style>
 </head>
 <body>
-<div id="waiter" style="display: none"> Connecting ...</div>
-
 <div class="container form-container" style="display: none">
-    <form id="connect" action="" method="post" enctype="multipart/form-data">
+    <form id="connect" action="/" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col">
                 <label for="Hostname">Hostname</label>
@@ -69,30 +56,29 @@
         <div class="row">
             <div class="col">
                 <label for="Username">Private Key</label>
-                <input class="form-control" type="file" id="privatekey" name="privatekey" value="">
+                <input class="form-control" type="file" id="privatekey" name="privatekey" value="" disabled>
             </div>
             <div class="col">
                 <label for="Passphrase">Passphrase</label>
-                <input class="form-control" type="password" id="passphrase" name="passphrase" value="">
+                <input class="form-control" type="password" id="passphrase" name="passphrase" value="" disabled>
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <label for="totp">Totp (time-based one-time password)</label>
-                <input class="form-control" type="password" id="totp" name="totp" value="">
+                <input class="form-control" type="password" id="totp" name="totp" value="" disabled>
             </div>
             <div class="col">
             </div>
         </div>
         <input type="hidden" id="term" name="term" value="xterm-256color">
-        {% module xsrf_form_html() %}
+        <input type="hidden" id="_xsrf" name="_xsrf" value="test_xsrf">
         <button type="submit" class="btn btn-primary">Connect</button>
         <button type="reset" class="btn btn-danger">Reset</button>
     </form>
 </div>
 
 <div class="container">
-    <div id="status" style="color: red;"></div>
     <div id="terminal"></div>
 </div>
 
@@ -111,8 +97,6 @@
         integrity="sha512-+Tn2V/oN9O/kiaJg/1o5bETqyS35pMDJzkhkf8uvCzxmRox69AsWkSpBSMEGEe4EZp07Nunw712J3Xvh5Tti0w=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="static/js/main.js"></script>
-
-
 </body>
 </html>
 
