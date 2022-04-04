@@ -15,14 +15,12 @@ from paramiko.channel import Channel
 from fastapi import WebSocket, WebSocketDisconnect
 from starlette.websockets import WebSocketState
 
+from server.exceptions import SSHStopRetryException
 from server.models import User, ConnectionInfo
 
 MAX_SSH_CONNECTION = 5  # Maximum number of SSH connection per user
 ssh_clients: Dict[str, Set[SSHWorker]] = defaultdict(set)  # (user-id, ip): {ssh-worker1, ...}
 
-
-class SSHStopRetry(Exception):
-    pass
 
 class WorkerStatus(Enum):
     DISCONNECTED = 0
@@ -66,7 +64,7 @@ class SSHWorker:
         self.awaitable_recv_ssh: asyncio.tasks.Task | None = None
 
     @property
-    def is_connected(self):
+    def is_connected(self) -> bool:
         return self.status == WorkerStatus.CONNECTED
 
     def set_ssh_channel(self):
@@ -85,7 +83,7 @@ class SSHWorker:
             self.ssh_retry -= 1
 
             if self.ssh_retry < 0:
-                raise SSHStopRetry
+                raise SSHStopRetryException
             raise IOError
 
     def setup_recycle(self, websocket: WebSocket, connection_info: ConnectionInfo):
@@ -198,7 +196,7 @@ def ssh_connect(
     username: str,
     password: str,
     port: int = 22
-):
+) -> SSHWorker:
     if len(ssh_clients[str(user)]) > MAX_SSH_CONNECTION:
         raise Exception(Reason.SSH_TOO_MANY)
 
