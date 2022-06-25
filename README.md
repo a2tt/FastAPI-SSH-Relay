@@ -1,4 +1,4 @@
-# Fast SSH Relay
+# FastAPI SSH Relay
 
 > Referred to https://github.com/huashengdun/webssh/
 
